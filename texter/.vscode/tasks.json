@@ -1,0 +1,41 @@
+{
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "release",
+      "command": "-c 'make release'",
+      "args": [],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "shell": {
+          "executable": "E:/DevTools/msys64/msys2_shell.cmd",
+          "args": ["-defterm", "-here", "-no-start", "-mingw64"]
+        }
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "shell",
+      "label": "debug",
+      "command": "-c make",
+      "args": [],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "shell": {
+          "executable": "E:/DevTools/msys64/msys2_shell.cmd",
+          "args": ["-defterm", "-here", "-no-start", "-mingw64"]
+        }
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ],
+  "version": "2.0.0"
+}

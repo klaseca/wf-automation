@@ -1,0 +1,14 @@
+{
+  "terminal.integrated.shell.windows": "E:/DevTools/msys64/msys2_shell.cmd",
+  "terminal.integrated.shellArgs.windows": [
+    "-defterm",
+    "-here",
+    "-no-start",
+    "-mingw64"
+  ],
+  "files.associations": {
+    "thread": "cpp",
+    "iosfwd": "cpp",
+    "sstream": "cpp"
+  }
+}

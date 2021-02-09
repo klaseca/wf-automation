@@ -1,0 +1,4 @@
+BasedOnStyle: LLVM
+AlignAfterOpenBracket: DontAlign
+ConstructorInitializerIndentWidth: 2
+ContinuationIndentWidth: 2
