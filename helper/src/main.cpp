@@ -67,57 +67,68 @@ LRESULT CALLBACK LLKeyProc(int nCode, WPARAM wParam, LPARAM lParam) {
         longAction(longTimer, state, im);
       }
     } else if (keyCode == state.key.checkCursorPos) {
+      wstring message;
+
       if (state.isCheckCursorPos) {
         state.isCheckCursorPos = false;
-        MessageBoxW(
-          NULL, L"Check cursor position disabled", state.name.c_str(), MB_OK);
+        message = L"Check cursor position disabled";
       } else {
         state.isCheckCursorPos = true;
-        MessageBoxW(
-          NULL, L"Check cursor position enabled", state.name.c_str(), MB_OK);
+        message = L"Check cursor position enabled";
       }
+
+      MessageBoxW(nullptr, message.c_str(), state.name.c_str(), MB_OK);
     } else if (keyCode == state.key.space) {
+      wstring message;
+
       if (state.isSpace) {
         state.isSpace = false;
-        MessageBoxW(NULL, L"Press space disabled", state.name.c_str(), MB_OK);
+        message = L"Press space disabled";
       } else {
         state.isSpace = true;
-        MessageBoxW(NULL, L"Press space enabled", state.name.c_str(), MB_OK);
+        message = L"Press space enabled";
       }
+
+      MessageBoxW(nullptr, L"Press space enabled", state.name.c_str(), MB_OK);
     } else if (keyCode == state.key.getCursorPos) {
       GetCursorPos(&state.cursorPosition);
+
       wstringstream ss;
       ss << L"New cursor position: x=" << state.cursorPosition.x << L", y="
          << state.cursorPosition.y;
-      MessageBoxW(NULL, ss.str().c_str(), state.name.c_str(), MB_OK);
+
+      MessageBoxW(nullptr, ss.str().c_str(), state.name.c_str(), MB_OK);
     }
   }
-  return CallNextHookEx(NULL, nCode, wParam, lParam);
+  return CallNextHookEx(nullptr, nCode, wParam, lParam);
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
   HWND hMainWnd;
   MSG uMsg;
 
-  WNDCLASSEX wc;
+  WNDCLASSEX wc{};
 
   wc.cbSize = sizeof(WNDCLASSEX);
   wc.hbrBackground = (HBRUSH)GetStockObject(0);
   wc.hCursor = LoadCursor(0, IDC_ARROW);
   wc.hIcon = LoadIcon(GetModuleHandle(0), MAKEINTRESOURCE(APP_ICON));
-  wc.hIconSm = wc.hIcon;
   wc.hInstance = hInstance;
-  wc.lpfnWndProc = &WindowProc;
+  wc.lpfnWndProc = WindowProc;
   wc.lpszClassName = state.name.c_str();
 
   if (!RegisterClassEx(&wc)) {
+    MessageBoxW(nullptr, L"Failed to initialize WNDCLASSEX", state.name.c_str(),
+      MB_OK | MB_ICONERROR);
     return EXIT_FAILURE;
   }
 
-  hMainWnd = CreateWindowW(state.name.c_str(), state.name.c_str(),
-    WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, 0, 0, hInstance, 0);
+  hMainWnd = CreateWindowEx(0, state.name.c_str(), state.name.c_str(),
+    WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, hInstance, nullptr);
 
   if (!hMainWnd) {
+    MessageBoxW(nullptr, L"Failed to initialize main window",
+      state.name.c_str(), MB_OK | MB_ICONERROR);
     return EXIT_FAILURE;
   }
 

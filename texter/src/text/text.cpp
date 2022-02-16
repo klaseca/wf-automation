@@ -86,7 +86,7 @@ void startWrite(const State &state, const std::vector<std::string> &v,
 
   wstring a = to_wstring(v.size());
 
-  MessageBoxW(NULL, a.c_str(), state.name.c_str(), MB_OK);
+  MessageBoxW(nullptr, a.c_str(), state.name.c_str(), MB_OK);
 
   if (l.empty()) {
     l.resize(v.size());

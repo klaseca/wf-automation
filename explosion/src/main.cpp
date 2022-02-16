@@ -63,32 +63,35 @@ LRESULT CALLBACK LLKeyProc(int nCode, WPARAM wParam, LPARAM lParam) {
       }
     }
   }
-  return CallNextHookEx(NULL, nCode, wParam, lParam);
+  return CallNextHookEx(nullptr, nCode, wParam, lParam);
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
   HWND hMainWnd;
   MSG uMsg;
 
-  WNDCLASSEX wc;
+  WNDCLASSEX wc{};
 
   wc.cbSize = sizeof(WNDCLASSEX);
   wc.hbrBackground = (HBRUSH)GetStockObject(0);
   wc.hCursor = LoadCursor(0, IDC_ARROW);
   wc.hIcon = LoadIcon(GetModuleHandle(0), MAKEINTRESOURCE(APP_ICON));
-  wc.hIconSm = wc.hIcon;
   wc.hInstance = hInstance;
-  wc.lpfnWndProc = &WindowProc;
+  wc.lpfnWndProc = WindowProc;
   wc.lpszClassName = state.name.c_str();
 
   if (!RegisterClassEx(&wc)) {
+    MessageBoxW(nullptr, L"Failed to initialize WNDCLASSEX", state.name.c_str(),
+      MB_OK | MB_ICONERROR);
     return EXIT_FAILURE;
   }
 
-  hMainWnd = CreateWindow(state.name.c_str(), state.name.c_str(),
-    WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, 0, 0, hInstance, 0);
+  hMainWnd = CreateWindowEx(0, state.name.c_str(), state.name.c_str(),
+    WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, hInstance, nullptr);
 
   if (!hMainWnd) {
+    MessageBoxW(nullptr, L"Failed to initialize main window",
+      state.name.c_str(), MB_OK | MB_ICONERROR);
     return EXIT_FAILURE;
   }
 

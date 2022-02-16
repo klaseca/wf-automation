@@ -1,10 +1,10 @@
 #include "resources/resource.hpp"
 #include "state/state.hpp"
 #include "text/text.hpp"
-#include <windows.h>
-#include <strsafe.h>
 #include <list>
+#include <strsafe.h>
 #include <vector>
+#include <windows.h>
 
 using namespace std;
 
@@ -33,11 +33,11 @@ LRESULT CALLBACK LLKeyProc(int nCode, WPARAM wParam, LPARAM lParam) {
         FileState fstate = getFileText("text.txt");
         if (fstate.isNotFile) {
           MessageBoxW(
-            NULL, L"Not found 'text.txt' file", state.name.c_str(), MB_OK);
+            nullptr, L"Not found 'text.txt' file", state.name.c_str(), MB_OK);
         } else {
           FileState settings = getFileText("settings.txt");
           if (settings.isNotFile) {
-            MessageBoxW(NULL, L"Not found 'settings.txt' file",
+            MessageBoxW(nullptr, L"Not found 'settings.txt' file",
               state.name.c_str(), MB_OK);
           } else {
             state.isWriting = true;
@@ -50,11 +50,11 @@ LRESULT CALLBACK LLKeyProc(int nCode, WPARAM wParam, LPARAM lParam) {
         }
       } else {
         state.isWriting = false;
-        MessageBoxW(NULL, L"Writing stopped", state.name.c_str(), MB_OK);
+        MessageBoxW(nullptr, L"Writing stopped", state.name.c_str(), MB_OK);
       }
     }
   }
-  return CallNextHookEx(NULL, nCode, wParam, lParam);
+  return CallNextHookEx(nullptr, nCode, wParam, lParam);
 }
 
 LRESULT WINAPI WindowProc(HWND hWnd, UINT uMsg, WPARAM wp, LPARAM lp) {
@@ -85,27 +85,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
   HWND hMainWnd;
   MSG uMsg;
 
-  WNDCLASSEX wc;
-
-  memset(&wc, 0, sizeof(WNDCLASSEX));
+  WNDCLASSEX wc{};
 
   wc.cbSize = sizeof(WNDCLASSEX);
   wc.hbrBackground = (HBRUSH)GetStockObject(0);
   wc.hCursor = LoadCursor(0, IDC_ARROW);
   wc.hIcon = LoadIcon(GetModuleHandle(0), MAKEINTRESOURCE(APP_ICON));
-  wc.hIconSm = wc.hIcon;
   wc.hInstance = hInstance;
-  wc.lpfnWndProc = &WindowProc;
+  wc.lpfnWndProc = WindowProc;
   wc.lpszClassName = state.name.c_str();
 
   if (!RegisterClassEx(&wc)) {
+    MessageBoxW(nullptr, L"Failed to initialize WNDCLASSEX", state.name.c_str(),
+      MB_OK | MB_ICONERROR);
     return EXIT_FAILURE;
   }
 
-  hMainWnd = CreateWindow(state.name.c_str(), state.name.c_str(),
-    WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, 0, 0, hInstance, 0);
+  hMainWnd = CreateWindowEx(0, state.name.c_str(), state.name.c_str(),
+    WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, hInstance, nullptr);
 
   if (!hMainWnd) {
+    MessageBoxW(nullptr, L"Failed to initialize main window",
+      state.name.c_str(), MB_OK | MB_ICONERROR);
     return EXIT_FAILURE;
   }
 
